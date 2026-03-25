@@ -13,7 +13,8 @@ function WorkerDashboard() {
   const navigate = useNavigate();
   const user     = JSON.parse(localStorage.getItem("user") || "{}");
 
-  useEffect(() => { loadComplaints(); }, []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+useEffect(() => { loadComplaints(); }, []);
 
   const loadComplaints = () => {
     API.get(`/complaints/worker/${user.id}`)
