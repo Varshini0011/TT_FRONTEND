@@ -24,7 +24,8 @@ function StudentStaff({ role }) {
   const roleLabel = (user.role === "STAFF" || user.role === "TEACHER")
                       ? "Teacher" : "Student";
 
-  useEffect(() => { loadComplaints(); }, []);
+ // eslint-disable-next-line react-hooks/exhaustive-deps
+useEffect(() => { loadComplaints(); }, []);
 
   const loadComplaints = () => {
     API.get(`/complaints/user/${user.username}`)
