@@ -137,6 +137,39 @@ body { font-family: 'Lato', sans-serif; background: #F5EFE6; }
   color: var(--text-dark);
 }
 
+/* Priority Selector */
+.priority-selector {
+  display: flex;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.priority-btn {
+  flex: 1;
+  padding: 10px 6px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.priority-btn:hover {
+  opacity: 0.85;
+  transform: translateY(-1px);
+}
+
+/* Priority Badge in table */
+.priority-badge {
+  padding: 4px 10px;
+  border-radius: 20px;
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
 /* ── Card ── */
 .sd-card {
   background: var(--white);

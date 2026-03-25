@@ -6,14 +6,15 @@ import NotificationBell from "./Notifications";
 import { useNavigate } from "react-router-dom";
 
 function StudentStaff({ role }) {
-  const [location,    setLocation]    = useState("");
-  const [issueType,   setIssueType]   = useState("");
-  const [description, setDescription] = useState("");
-  const [complaints,  setComplaints]  = useState([]);
-  const [image,       setImage]       = useState(null);
-  const [submitting,  setSubmitting]  = useState(false);
-  const [activeTab,   setActiveTab]   = useState("submit");
-  const [filterStatus,setFilterStatus]= useState("ALL");
+  const [location,     setLocation]     = useState("");
+  const [issueType,    setIssueType]    = useState("");
+  const [description,  setDescription]  = useState("");
+  const [complaints,   setComplaints]   = useState([]);
+  const [image,        setImage]        = useState(null);
+  const [submitting,   setSubmitting]   = useState(false);
+  const [activeTab,    setActiveTab]    = useState("submit");
+  const [filterStatus, setFilterStatus] = useState("ALL");
+  const [priority,     setPriority]     = useState(2);
 
   const navigate  = useNavigate();
   const user      = JSON.parse(localStorage.getItem("user") || "{}");
@@ -50,10 +51,12 @@ function StudentStaff({ role }) {
         location,
         issueType,
         description,
+        priority,
         image: image || null
       });
       alert("Complaint Submitted Successfully!");
-      setLocation(""); setIssueType(""); setDescription(""); setImage(null);
+      setLocation(""); setIssueType(""); setDescription("");
+      setImage(null); setPriority(2);
       loadComplaints();
       setActiveTab("complaints");
     } catch (err) {
@@ -76,6 +79,18 @@ function StudentStaff({ role }) {
     ASSIGNED:    "#F39C12"
   })[s] || "#aaa";
 
+  const priorityLabel = (p) => ({
+    1: "🔴 Priority 1 — Critical",
+    2: "🟡 Priority 2 — Medium",
+    3: "🟢 Priority 3 — Low"
+  })[p] || "Medium";
+
+  const priorityColor = (p) => ({
+    1: "#e74c3c",
+    2: "#f39c12",
+    3: "#2ecc71"
+  })[p] || "#f39c12";
+
   const filteredComplaints = filterStatus === "ALL"
     ? complaints
     : complaints.filter(c => c.status === filterStatus);
@@ -96,7 +111,7 @@ function StudentStaff({ role }) {
           </div>
         </div>
         <nav className="sidebar-nav">
-          <button className={activeTab === "submit"     ? "nav-item active" : "nav-item"}
+          <button className={activeTab === "submit" ? "nav-item active" : "nav-item"}
             onClick={() => setActiveTab("submit")}>
             📝 Submit Complaint
           </button>
@@ -113,7 +128,6 @@ function StudentStaff({ role }) {
 
       {/* ── Main Content ── */}
       <main className="sd-main">
-        {/* Top Bar */}
         <div className="sd-topbar">
           <h1 className="sd-heading">
             {activeTab === "submit" ? "Report an Issue" : "My Complaints"}
@@ -154,6 +168,28 @@ function StudentStaff({ role }) {
                     value={description} onChange={e => setDescription(e.target.value)} rows={4} />
                 </div>
 
+                {/* ── Priority Selector ── */}
+                <div className="field-group">
+                  <label className="field-label">🚨 Priority Level <span className="required">*</span></label>
+                  <div className="priority-selector">
+                    {[1, 2, 3].map(p => (
+                      <button
+                        key={p}
+                        type="button"
+                        className={`priority-btn ${priority === p ? "selected" : ""}`}
+                        style={{
+                          borderColor: priority === p ? priorityColor(p) : "#ddd",
+                          background:  priority === p ? priorityColor(p) : "white",
+                          color:       priority === p ? "white" : "#555"
+                        }}
+                        onClick={() => setPriority(p)}
+                      >
+                        {p === 1 ? "🔴 P1 Critical" : p === 2 ? "🟡 P2 Medium" : "🟢 P3 Low"}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
                 <button className="submit-btn" onClick={submitComplaint} disabled={submitting}>
                   {submitting ? "Submitting…" : "Submit Complaint"}
                 </button>
@@ -165,7 +201,6 @@ function StudentStaff({ role }) {
         {/* ── COMPLAINTS TAB ── */}
         {activeTab === "complaints" && (
           <div className="sd-card">
-            {/* Status filter */}
             <div className="filter-row">
               {["ALL","PENDING","IN_PROGRESS","REVIEW","SOLVED"].map(s => (
                 <button key={s}
@@ -190,6 +225,7 @@ function StudentStaff({ role }) {
                       <th>Location</th>
                       <th>Issue</th>
                       <th>Description</th>
+                      <th>Priority</th>
                       <th>Image</th>
                       <th>Status</th>
                     </tr>
@@ -201,6 +237,12 @@ function StudentStaff({ role }) {
                         <td>{c.location}</td>
                         <td><strong>{c.issueType}</strong></td>
                         <td className="desc-cell">{c.description}</td>
+                        <td>
+                          <span className="priority-badge"
+                            style={{ background: priorityColor(c.priority) }}>
+                            {priorityLabel(c.priority)}
+                          </span>
+                        </td>
                         <td>
                           {c.image && (
                             <img src={c.image} alt="issue" className="table-img"
