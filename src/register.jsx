@@ -21,7 +21,11 @@ function Register() {
       setFormData({ username: '', email: '', password: '', role: '' });
     } catch (err) {
       console.error("Error:", err);
-      alert("Registration Failed. Please try again.");
+      if (err.response?.status === 400) {
+        alert("User with this email already exists! Please login instead.");
+      } else {
+        alert("Registration Failed. Please try again.");
+      }
     }
     setLoading(false);
   };
