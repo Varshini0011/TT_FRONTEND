@@ -15,7 +15,7 @@ function Login() {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.post("http://localhost:8080/users/login", formData);
+      const res = await axios.post("https://tt-backend-j73r.onrender.com/users/login", formData);
       if (!res.data) { alert("Invalid email or password"); setLoading(false); return; }
 
       localStorage.setItem("user", JSON.stringify(res.data));

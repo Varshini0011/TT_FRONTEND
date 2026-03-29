@@ -164,7 +164,7 @@ function CameraCapture({ onDetect }) {
       const fd   = new FormData();
       fd.append("image", blob, fileName);
 
-      const res = await fetch("http://localhost:8080/analyze", {
+      const res = await fetch("https://tt-backend-j73r.onrender.com/users/login", {
         method: "POST",
         body:   fd
       });

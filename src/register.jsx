@@ -16,7 +16,7 @@ function Register() {
     e.preventDefault();
     setLoading(true);
     try {
-      await axios.post("http://localhost:8080/users/register", formData);
+      await axios.post("https://tt-backend-j73r.onrender.com/users/register", formData);
       alert("Registration Successful! You can now login.");
       setFormData({ username: '', email: '', password: '', role: '' });
     } catch (err) {
